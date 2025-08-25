@@ -4,15 +4,14 @@ nixPkgs = ["nodejs", "unzip", "rsync"]
 [phases.install]
 cmds = [
   "npm install",
-  # extract zip
   "rm -rf /tmp/extracted && mkdir -p /tmp/extracted",
   "unzip -o ./react-base-component.zip -d /tmp/extracted",
 
-  # step 1: copy semua isi kecuali folder tambahan/
+  # step 1: copy semua isi kecuali folder tambahan
   "rsync -av --exclude='tambahan/' /tmp/extracted/ node_modules/@syncfusion/",
 
-  # step 2: copy isi folder tambahan/ ke @syncfusion (jika ada)
-  \"if [ -d /tmp/extracted/tambahan ]; then rsync -av /tmp/extracted/tambahan/ node_modules/@syncfusion/ ; fi\"
+  # step 2: copy isi folder tambahan jika ada
+  "bash -c 'if [ -d /tmp/extracted/tambahan ]; then rsync -av /tmp/extracted/tambahan/ node_modules/@syncfusion/ ; fi'"
 ]
 
 [phases.build]
