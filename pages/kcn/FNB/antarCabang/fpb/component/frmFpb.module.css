@@ -1,0 +1,14 @@
+.custom-dialog .e-dialog {
+    margin-top: 0 !important;
+    top: 50px !important;
+    position: relative !important;
+    transform: translateY(0) !important;
+}
+
+.custom-dialog.e-dialog-container {
+    top: 0 !important;
+}
+
+.custom-dialog .e-dlg-header-content {
+    padding-top: 8px !important;
+}

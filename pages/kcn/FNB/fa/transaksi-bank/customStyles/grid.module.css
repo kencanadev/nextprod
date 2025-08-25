@@ -1,0 +1,30 @@
+.splitter-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.e-grid {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.e-headercontent {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: #f1f1f1;
+}
+
+.e-gridcontent {
+    flex: 1;
+    overflow: auto; /* Scroll hanya pada body grid */
+}
+
+.e-gridfooter {
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
+    background-color: #f1f1f1;
+}

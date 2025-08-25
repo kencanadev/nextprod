@@ -1,0 +1,529 @@
+.flex-container {
+    display: flex;
+    gap: 20px;
+}
+
+/* grid */
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 86% 14%;
+    gap: 10px;
+}
+
+.grid-left {
+    padding: 10px;
+}
+
+.grid-right {
+    margin-top: 5vh;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+/* grid catatan*/
+.grid-containerNote {
+    display: grid;
+    grid-template-columns: 77% 23%;
+    gap: 10px;
+}
+
+.grid-leftNote {
+    padding: 10px;
+}
+
+.grid-rightNote {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    /* gap: 5px; */
+}
+
+/* Border Content*/
+.bordered-content {
+    border: 1px solid black;
+    padding: 10px;
+    text-align: center; /* Membuat teks menjadi tengah horizontal */
+    height: 40vh;
+    display: flex;
+    justify-content: center; /* Mengatur posisi vertikal menjadi di tengah */
+    align-items: center; /* Mengatur posisi vertikal menjadi di tengah */
+    color: red;
+    font-style: italic;
+}
+
+.centered-text-file-pendukung {
+    font-size: 3vh;
+    margin: 0;
+}
+
+.titleText {
+    font-size: 2.5vh;
+    margin-bottom: 2vh;
+}
+
+.table {
+    border-collapse: separate !important;
+    border-spacing: 0;
+}
+
+.table th {
+    text-align: center !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 0px !important;
+    background: #309e70;
+    color: black !important;
+    font-size: 11px !important;
+    font-weight: bold !important;
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif !important;
+}
+
+.table td {
+    text-align: center !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 0 0 0 5px !important;
+    font-size: 11px !important;
+    font-weight: normal !important;
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif !important;
+}
+
+.table thead tr th {
+    border-right-width: 1px;
+    border-top-width: 0px;
+    border-bottom-width: 0px;
+    border-left-width: 0px;
+    border-style: solid;
+    border-color: #f1f1f1;
+    /* #bbb; */
+}
+
+.table thead tr:first-child th:last-child {
+    border-right-width: 0px;
+    border-top-width: 0px;
+    border-bottom-width: 0px;
+    border-left-width: 0px;
+    border-style: solid;
+    border-color: #f1f1f1;
+}
+
+.table tbody tr td {
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 0px;
+    border-left-width: 0px;
+    border-style: solid;
+    border-color: #f1f1f1;
+}
+
+.table tbody tr:last-child td:first-child {
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 0px;
+    border-left-width: 0px;
+    border-style: solid;
+    border-color: #f1f1f1;
+}
+
+.table tbody tr:first-child td:last-child {
+    border-right-width: 0px;
+    border-top-width: 1px;
+    border-bottom-width: 0px;
+    border-left-width: 1px;
+    border-style: solid;
+    border-color: #f1f1f1;
+}
+
+.table tbody tr:last-child td:last-child {
+    border-right-width: 0px;
+    border-top-width: 1px;
+    border-bottom-width: 0px;
+    border-left-width: 0px;
+    border-style: solid;
+    border-color: #f1f1f1;
+}
+
+.table tbody tr td:last-child {
+    border-right-width: 0px;
+    border-top-width: 1px;
+    border-bottom-width: 0px;
+    border-left-width: 0px;
+    border-style: solid;
+    border-color: #f1f1f1;
+}
+
+/* top-left border-radius */
+.table tr:first-child th:first-child {
+    border-top-left-radius: 6px;
+}
+
+/* top-right border-radius */
+.table tr:first-child th:last-child {
+    border-top-right-radius: 6px;
+}
+
+/* bottom-left border-radius */
+.table tr:last-child td:first-child {
+    border-bottom-left-radius: 6px;
+}
+
+/* bottom-right border-radius */
+.table tr:last-child td:last-child {
+    border-bottom-right-radius: 6px;
+}
+
+.titleText {
+    margin-bottom: 2vh;
+}
+
+.inputTableBasicSearch {
+    width: 100%;
+}
+
+.inputTableBasic:focus,
+.inputTableBasicSearch:focus,
+.inputTableBasicDate:focus {
+    outline: none;
+}
+
+.inputTableBasic:focus,
+.inputTableBasicSearch:focus,
+.inputTableBasicDate:focus {
+    border-color: #ccc;
+}
+
+.inline-flex-container {
+    display: flex;
+    flex-direction: row-reverse; /* Mengubah arah tata letak menjadi dari kanan ke kiri */
+}
+
+.custom-box-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Menempatkan elemen-elemen sejajar dan memberikan ruang di antara mereka */
+}
+
+.custom-box-aktif {
+    background-color: #fff; /* Warna latar belakang kotak */
+    border: 1px solid #0e1726; /* Garis tepi kotak */
+    border-radius: 5px; /* Sudut kotak yang melengkung */
+    width: 3vh; /* Lebar kotak */
+    height: 3vh; /* Tinggi kotak */
+    margin-left: 10px;
+}
+
+.custom-box-non-aktif {
+    background-color: #c0c0c0; /* Warna latar belakang kotak */
+    border: 1px solid #0e1726; /* Garis tepi kotak */
+    border-radius: 5px; /* Sudut kotak yang melengkung */
+    width: 3vh; /* Lebar kotak */
+    height: 3vh; /* Tinggi kotak */
+    margin-left: 10px;
+}
+
+.custom-box-bl {
+    background-color: #ff0000; /* Warna latar belakang kotak */
+    border: 1px solid #0e1726; /* Garis tepi kotak */
+    border-radius: 5px; /* Sudut kotak yang melengkung */
+    width: 3vh; /* Lebar kotak */
+    height: 3vh; /* Tinggi kotak */
+    margin-left: 10px;
+}
+
+.custom-box-noo {
+    background-color: #00ff80; /* Warna latar belakang kotak */
+    border: 1px solid #0e1726; /* Garis tepi kotak */
+    border-radius: 5px; /* Sudut kotak yang melengkung */
+    width: 3vh; /* Lebar kotak */
+    height: 3vh; /* Tinggi kotak */
+    margin-left: 10px;
+}
+
+.custom-box-batal-noo {
+    background-color: #ff8080; /* Warna latar belakang kotak */
+    border: 1px solid #0e1726; /* Garis tepi kotak */
+    border-radius: 5px; /* Sudut kotak yang melengkung */
+    width: 3vh; /* Lebar kotak */
+    height: 3vh; /* Tinggi kotak */
+    margin-left: 10px;
+}
+
+.custom-box-tidak-digarap {
+    background-color: #f5800a; /* Warna latar belakang kotak */
+    border: 1px solid #0e1726; /* Garis tepi kotak */
+    border-radius: 5px; /* Sudut kotak yang melengkung */
+    width: 3vh; /* Lebar kotak */
+    height: 3vh; /* Tinggi kotak */
+    margin-left: 10px;
+}
+
+.box-text {
+    margin-left: 10px; /* Jarak antara teks dan kotak */
+    font-weight: bold;
+}
+
+.grid-containerDlgDetailPpItem {
+    display: grid;
+    grid-template-columns: 27% 71%;
+    gap: 10px;
+}
+
+.modalDetailDragable {
+    position: fixed;
+    transform: translate(-50%, -50%);
+    border: 1px solid rgb(56, 55, 55);
+    padding: 28px;
+    background-color: #fbfafa;
+    z-index: 1000;
+    color: black;
+    width: 80%;
+    max-width: 80%;
+    overflow: auto;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+.closeButtonDetailDragable {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #333;
+}
+
+.modalPreviewPictureDragable {
+    position: fixed;
+    transform: translate(-50%, -50%);
+    border: 1px solid rgb(56, 55, 55);
+    padding: 28px;
+    background-color: #fbfafa;
+    z-index: 1000;
+    color: black;
+    overflow: auto;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+.w_328px {
+    width: 328px;
+}
+
+.panel {
+    background: #dedede;
+    width: 80%;
+    height: 80vh; /* Menggunakan 80% dari tinggi viewport */
+}
+
+@media (max-width: 1200px) {
+    .panel {
+        width: 90%; /* Misalnya, pada layar yang lebih kecil, kurangi lebar panel */
+    }
+}
+
+@media (max-width: 768px) {
+    .panel {
+        width: 100%; /* Misalnya, pada layar yang lebih kecil lagi, gunakan lebar penuh */
+        height: 100vh; /* Gunakan 100% dari tinggi viewport */
+    }
+}
+
+.colored-popup {
+    background-color: #3b3f5c; /* Ganti dengan warna yang diinginkan */
+}
+
+.button__container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px; /* Jarak antar tombol */
+    align-items: center;
+}
+
+.button__row {
+    display: flex;
+    gap: 8px;
+}
+
+.button__group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: flex-start; /* Sejajarkan ke kiri */
+}
+
+.tombol__merah {
+    background-color: red;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+}
+
+.tombol__biru {
+    background-color: blue;
+    color: white;
+    text-align: center;
+    width: fit-content; /* Lebar otomatis mengikuti teks */
+    padding: 8px 12px;
+}
+
+.sub__button__container {
+    display: flex;
+    flex-direction: column;
+    margin-left: auto; /* Agar sejajar dengan tombol atas */
+}
+
+.tombol__gray {
+    background-color: lightgray; /* Ubah latar belakang jadi abu-abu */
+    color: blue; /* Ubah teks jadi biru */
+    text-align: center;
+    width: fit-content; /* Lebar menyesuaikan teks */
+    padding: 8px 12px;
+    font-weight: bold;
+    height: 28px;
+}
+
+.tombol__batal {
+    background-color: lightgray; /* Ubah latar belakang jadi abu-abu */
+    color: red; /* Ubah teks jadi biru */
+    text-align: center;
+    width: fit-content; /* Lebar menyesuaikan teks */
+    padding: 8px 12px;
+    font-weight: bold;
+    height: 28px;
+}
+
+.tombol__approval {
+    background-color: lightgray; /* Ubah latar belakang jadi abu-abu */
+    color: green; /* Ubah teks jadi biru */
+    text-align: center;
+    width: fit-content; /* Lebar menyesuaikan teks */
+    padding: 8px 12px;
+    font-weight: bold;
+    height: 28px;
+}
+.label__gray {
+    background-color: lightgray; /* Ubah latar belakang jadi abu-abu */
+    color: blue; /* Ubah teks jadi biru */
+    text-align: center; /* Menyelaraskan teks ke tengah */
+    width: fit-content; /* Lebar menyesuaikan teks */
+    padding: 8px 12px; /* Memberikan jarak dalam elemen */
+    font-weight: bold; /* Membuat teks menjadi tebal */
+    height: 28px; /* Mengatur tinggi elemen */
+    border-radius: 4px; /* (Opsional) Menambahkan sudut melengkung untuk estetika */
+}
+
+/* Untuk Chrome, Safari, Edge, Opera */
+.e-input-group input[type='number']::-webkit-inner-spin-button,
+.e-input-group input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Untuk Firefox */
+.e-input-group input[type='number'] {
+    -moz-appearance: textfield;
+}
+
+.e-float-input.e-control-wrapper:not(.e-error) input:valid ~ label.e-float-text,
+.e-float-input.e-control-wrapper:not(.e-error) input ~ label.e-label-top.e-float-text {
+    color: pink;
+    font-size: 15px;
+}
+
+.pajak_form .form-group {
+    margin-bottom: 12px;
+}
+
+.pajak_form_label {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 500;
+}
+
+.akun_pajak_row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.akun_kode {
+    width: 120px;
+    min-width: 100px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 6px 8px;
+    background-color: #f9f9f9;
+}
+
+.akun_dropdown {
+    flex: 1;
+}
+
+.akun_row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.dropdown_akun {
+    border: 1px solid #ccc !important;
+    border-radius: 4px;
+    padding: 4px 8px;
+}
+
+/* Hilangkan spin button di browser berbasis WebKit (Chrome, Safari, Edge) */
+/* .e-control[type='number']::-webkit-inner-spin-button,
+.e-control[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+} */
+
+/* Hilangkan spin button di Firefox */
+/* .e-control[type='number'] {
+    -moz-appearance: textfield;
+} */
+
+/* .no_spin {
+    -moz-appearance: textfield;
+}
+
+.no_spin::-webkit-outer-spin-button,
+.no_spin::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+} */
+
+/* form.module.css */
+
+.no_spin input[type='number']::-webkit-inner-spin-button,
+.no_spin input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.no_spin input[type='number'] {
+    -moz-appearance: textfield;
+}
+
+.btn {
+    background-color: #d0d8e8;
+    border: 1px solid #7a8eb7;
+    font-size: 12px;
+    font-family: Tahoma, sans-serif;
+    padding: 4px 12px;
+    min-width: 70px;
+    cursor: pointer;
+}
+.btn:hover {
+    background-color: #c0c8d8;
+}

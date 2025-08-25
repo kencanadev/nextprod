@@ -1,0 +1,607 @@
+import React, { useEffect, useRef, useState } from 'react';
+import { useSession } from '@/pages/api/sessionContext';
+import { faTimes, faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ButtonComponent, CheckBoxComponent, ChangeEventArgs as ChangeEventArgsButton } from '@syncfusion/ej2-react-buttons';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import { AkunType, ExportToCustomExcel, fetchAkunData, FilterDef, postHapusAkun, swalDialog, swalToast, tipeValue } from './support';
+import { TextBoxComponent, FocusInEventArgs } from '@syncfusion/ej2-react-inputs';
+import { DropDownListComponent, ChangeEventArgs as ChangeEventArgsDropDown } from '@syncfusion/ej2-react-dropdowns';
+import { GridComponent, ColumnsDirective, ColumnDirective, Inject, Page, Selection, Sort, Group, Filter, Resize, Reorder, ExcelExport, PdfExport } from '@syncfusion/ej2-react-grids';
+import FrmDialogAkun from './support/FrmDialogAkun';
+import withReactContent from 'sweetalert2-react-content';
+import { ContextMenuComponent, MenuEventArgs, MenuItemModel } from '@syncfusion/ej2-react-navigations';
+import { myAlertGlobal } from '@/utils/routines';
+
+const Index = () => {
+    // Definition
+    // Sessions
+    const gridAkun = useRef<GridComponent>(null);
+    const { sessionData, isLoading } = useSession();
+    const entitas_user = sessionData?.entitas ?? '';
+    const kode_entitas = sessionData?.kode_entitas ?? '';
+    const userid = sessionData?.userid ?? '';
+    const kode_user = sessionData?.kode_user ?? '';
+    const token = sessionData?.token ?? '';
+    const [panelVisible, setPanelVisible] = useState(true);
+    const [showModalCreate, setShowModalCreate] = useState(false);
+    const [typeForm, setTypeForm] = useState('');
+    const [isShowTaskMenu, setIsShowTaskMenu] = useState(false);
+    const [filterData, setFilterData] = useState<FilterDef>({
+        noAkunValue: '',
+        keteranganValue: '',
+        tipeValue: '',
+        nonAktifValue: 'Y',
+        levelAkunValue: '',
+        isNoAkunChecked: false,
+        isKeteranganChecked: false,
+        isTipeChecked: false,
+    });
+    const [dsMaster, setDsMaster] = useState<AkunType[]>([]);
+    const [selectedAkun, setSelectedAkun] = useState<string>('');
+    const [selectedKodeAkun, setSelectedKodeAkun] = useState<string>('');
+    const [searchValue, setSearchValue] = useState({
+        noAkunValue: '',
+        namaAkunValue: '',
+    });
+    const styleButton = { width: 77 + 'px', height: '28px', marginBottom: '0.5em', marginTop: 0.5 + 'em', marginRight: 0.8 + 'em', backgroundColor: '#3b3f5c' };
+    let cMenuCetak: ContextMenuComponent;
+    let menuCetakItems: MenuItemModel[] = [
+        {
+            text: 'Konversi ke Excel...',
+        },
+    ];
+    // Function
+    function btnCetakClick(e: any): void {
+        var clientRect = (e.target as Element).getBoundingClientRect();
+        cMenuCetak.open(clientRect.bottom, clientRect.left);
+    }
+    const openForm = (type: string) => {
+        if (type === 'edit' && !selectedAkun) {
+            console.log('selectedAkun :', selectedAkun);
+            myAlertGlobal('Silahkan pilih data terlebih dahulu', 'daftarAkun', 'warning');
+            return;
+        }
+        setTypeForm(type);
+        setShowModalCreate(true);
+    };
+    const handleFilterClick = () => {
+        setPanelVisible(true);
+    };
+    const updateStateFilter = (field: any, value: any) => {
+        setFilterData((prev) => ({
+            ...prev,
+            [field]: value,
+        }));
+    };
+    const TextTemplate = (props: any, field: string) => {
+        return <p className={`${props.header === 'Y' && props.tingkat > 0 ? 'font-bold' : ''} ${props.header === 'N' && props.tingkat > 0 ? 'ml-3 font-normal' : ''}`}>{props[field]}</p>;
+    };
+    const deleteAkun = async () => {
+        if (!selectedAkun) {
+            withReactContent(swalToast).fire({
+                icon: 'error',
+                title: `<p style="font-size:12px">Silahkan pilih akun terlebih dahulu.</p>`,
+                width: '100%',
+                target: '#daftarAkun',
+            });
+            return;
+        } else {
+            const selectedRecords = gridAkun.current?.getSelectedRecords() as AkunType[];
+            console.log('selectedRecords', selectedRecords);
+            if (selectedRecords[0].header === 'Y') {
+                withReactContent(swalToast).fire({
+                    icon: 'warning',
+                    title: `<p style="font-size:12px">No. Akun ${selectedRecords[0].no_akun} merupakan akun induk tidak bisa dihapus.</p>`,
+                    width: '100%',
+                    target: '#daftarAkun',
+                });
+                return;
+            } else if (parseFloat(selectedRecords[0].balance) !== 0) {
+                withReactContent(swalToast).fire({
+                    icon: 'warning',
+                    title: `<p style="font-size:12px">No. Akun ${selectedRecords[0].no_akun} saldo balance belum NOL tidak bisa dihapus</p>`,
+                    width: '100%',
+                    target: '#daftarAkun',
+                });
+                return;
+            }
+
+            withReactContent(swalDialog)
+                .fire({
+                    title: '<p style="font-size:13px; font-weight:bold; text-align:center;">Hapus Data Akun </p>',
+                    html: `
+            <div class="custom-content" style="font-size:13px; text-align:left;">
+                <p><strong>No. Akun   :</strong> ${selectedRecords[0].no_akun}</p>
+                <p><strong>Keterangan   :</strong> ${selectedRecords[0].nama_akun}</p>
+            </div>
+        `,
+                    width: '21%',
+                    confirmButtonText: 'Yes',
+                    cancelButtonText: 'No',
+                    showCancelButton: true,
+                })
+                .then(async (result) => {
+                    if (result.isConfirmed) {
+                        const deleteObject = {
+                            entitas: kode_entitas,
+                            kode_akun: selectedRecords[0].kode_akun,
+                            no_akun: selectedRecords[0].no_akun,
+                            nama_akun: selectedRecords[0].nama_akun,
+                            userid: userid.toUpperCase(),
+                        };
+                        const res = await postHapusAkun(token, deleteObject);
+                        if (res.status) {
+                            withReactContent(swalToast).fire({
+                                icon: 'success',
+                                title: `<p style="font-size:12px">Data berhasil dihapus.</p>`,
+                                width: '100%',
+                                target: '#daftarAkun',
+                            });
+                            refreshData();
+                        } else {
+                            withReactContent(swalToast).fire({
+                                icon: 'error',
+                                title: `<p style="font-size:12px">Data gagal dihapus.</p>`,
+                                width: '100%',
+                                target: '#daftarAkun',
+                            });
+                        }
+                    }
+                });
+        }
+    };
+    async function menuCetakSelect(args: MenuEventArgs) {
+        if (args.item.text === 'Konversi ke Excel...') {
+            await ExportToCustomExcel(dsMaster, kode_entitas + ' - Daftar Akun', kode_entitas);
+        }
+    }
+    const refreshData = async () => {
+        const newData = await fetchAkunData(kode_entitas, token, filterData);
+        setTimeout(() => {
+            setDsMaster(newData);
+        }, 500);
+    };
+    // UseEffect
+    useEffect(() => {
+        if (kode_entitas && token) {
+            refreshData();
+        }
+    }, [kode_entitas]);
+    return (
+        <>
+            <div className={`Main`} id="daftarAkun">
+                <div style={{ minHeight: '40px' }} className="mb-1 flex flex-col items-center justify-between md:flex-row">
+                    <div className="gap-2 sm:flex">
+                        {/* === Button Group === */}
+                        <div className="flex pr-1 sm:border-r">
+                            <ButtonComponent
+                                id="btnDataBaru"
+                                cssClass="e-primary e-small"
+                                content="Baru"
+                                style={styleButton}
+                                disabled={false}
+                                onClick={() => {
+                                    openForm('create');
+                                }}
+                            />
+                            <ButtonComponent
+                                id="btnDataUbah"
+                                cssClass="e-primary e-small"
+                                content="Ubah"
+                                disabled={false}
+                                style={styleButton}
+                                onClick={() => {
+                                    openForm('edit');
+                                }}
+                            />
+
+                            {/* <ButtonComponent
+                                id="btnHapus"
+                                cssClass="e-primary e-small"
+                                content="Hapus"
+                                disabled
+                                style={{
+                                    // ...styleButton,
+                                    width: 77 + 'px',
+                                    height: '28px',
+                                    marginBottom: '0.5em',
+                                    marginTop: 0.5 + 'em',
+                                    marginRight: 0.8 + 'em',
+                                    color: 'gray',
+                                    cursor: 'not-allowed',
+                                }}
+                                onClick={() => {
+                                    // openForm('edit');
+                                    deleteAkun();
+                                }}
+                            /> */}
+                            <ButtonComponent
+                                id="btnFilter"
+                                cssClass="e-primary e-small"
+                                style={
+                                    panelVisible
+                                        ? {
+                                              //   ...styleButton,
+                                              width: 77 + 'px',
+                                              height: '28px',
+                                              marginBottom: '0.5em',
+                                              marginTop: 0.5 + 'em',
+                                              marginRight: 0.8 + 'em',
+                                              color: 'gray',
+                                          }
+                                        : { ...styleButton, color: 'white' }
+                                }
+                                onClick={handleFilterClick}
+                                disabled={panelVisible}
+                                content="Filter"
+                            />
+                            <ContextMenuComponent
+                                id="cCetak"
+                                items={menuCetakItems}
+                                select={menuCetakSelect}
+                                ref={(scope: any) => (cMenuCetak = scope as any)}
+                                animationSettings={{ duration: 800, effect: 'FadeIn' }}
+                            />
+                            <ButtonComponent id="btnGantiSalesMan" iconCss="e-icons e-chevron-down" cssClass="e-primary e-small" style={styleButton} onClick={btnCetakClick}>
+                                Cetak
+                            </ButtonComponent>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <p>
+                                <span className="underline">C</span>ari
+                            </p>
+                            {/* === Search Group === */}
+                            <div className="rounded border border-gray-300 bg-white px-2">
+                                <TextBoxComponent
+                                    id="seacrhNoAkun"
+                                    name="seacrhNoAkun"
+                                    placeholder="<No. Akun>"
+                                    floatLabelType="Never"
+                                    value={searchValue.noAkunValue}
+                                    onChange={(e: any) => {
+                                        // setSearchValue({ ...searchValue, noAkunValue: e.value });
+                                        gridAkun.current?.search(e.value);
+                                    }}
+                                />
+                            </div>
+                            <div className="rounded border border-gray-300 bg-white px-2">
+                                <TextBoxComponent
+                                    id="seacrhNoAkun"
+                                    name="seacrhNoAkun"
+                                    placeholder="<Keterangan>"
+                                    floatLabelType="Never"
+                                    value={searchValue.namaAkunValue}
+                                    onChange={(e: any) => {
+                                        gridAkun.current?.search(e.value);
+                                    }}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="ml-3 mr-1" style={{ display: 'flex', alignItems: 'center' }}>
+                        <span className="mt-1" style={{ fontSize: '20px', fontFamily: 'Times New Roman' }}>
+                            Daftar Akun
+                        </span>
+                    </div>
+                </div>
+                <div className="relative flex h-[calc(100vh-230px)] gap-3">
+                    {panelVisible && (
+                        <div
+                            className={`panel absolute z-10 hidden h-full w-[300px] max-w-full flex-none space-y-4 p-4 dark:border-[#191e3a] xl:relative xl:block xl:h-auto ltr:rounded-r-none ltr:xl:rounded-r-md rtl:rounded-l-none rtl:xl:rounded-l-md ${
+                                isShowTaskMenu && '!block'
+                            }`}
+                            style={{ background: '#dedede' }}
+                        >
+                            <div className="flex h-full flex-col pb-3">
+                                <div className="pb-5">
+                                    <div className="flex items-center text-center">
+                                        <button className="absolute right-0 top-0 p-2 text-gray-600 hover:text-gray-900" onClick={() => setPanelVisible(!panelVisible)}>
+                                            <FontAwesomeIcon icon={faTimes} width="18" height="18" />
+                                        </button>
+                                        <div className="shrink-0">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                {/* prettier-ignore */}
+                                                <path
+                                                                            stroke="currentColor"
+                                                                            strokeWidth="1.5"
+                                                                            d="M22 5.814v.69c0 1.038 0 1.557-.26 1.987-.26.43-.733.697-1.682 1.231l-2.913 1.64c-.636.358-.955.538-1.182.735a2.68 2.68 0 00-.9 1.49c-.063.285-.063.619-.063 1.286v2.67c0 1.909 0 2.863-.668 3.281-.668.418-1.607.05-3.486-.684-.895-.35-1.342-.524-1.594-.879C9 18.907 9 18.451 9 17.542v-2.67c0-.666 0-1-.064-1.285a2.68 2.68 0 00-.898-1.49c-.228-.197-.547-.377-1.183-.735l-2.913-1.64c-.949-.534-1.423-.8-1.682-1.23C2 8.06 2 7.541 2 6.503v-.69"
+                                                                        />
+                                                <path
+                                                    stroke="currentColor"
+                                                    strokeWidth="1.5"
+                                                    d="M22 5.815c0-1.327 0-1.99-.44-2.403C21.122 3 20.415 3 19 3H5c-1.414 0-2.121 0-2.56.412C2 3.824 2 4.488 2 5.815"
+                                                    opacity="0.5"
+                                                />
+                                            </svg>
+                                        </div>
+                                        <h3 className="text-lg font-semibold ltr:ml-3 rtl:mr-3">Filtering Data</h3>
+                                    </div>
+                                </div>
+                                <div className="mb-1 h-px w-full border-b border-white-light dark:border-[#1b2e4b]"></div>
+                                <PerfectScrollbar className="growltr:-mr3.5 ltr:pr3.5 relative h-full rtl:-ml-3.5 rtl:pl-3.5">
+                                    <div className="flex h-full flex-col gap-6 overflow-auto">
+                                        {/* Filter List */}
+                                        <div>
+                                            {/* No. Akun */}
+                                            <div className="mt-2 flex">
+                                                <CheckBoxComponent
+                                                    label="No. Akun"
+                                                    checked={filterData.isNoAkunChecked}
+                                                    change={(args: ChangeEventArgsButton) => {
+                                                        const value: any = args.checked;
+                                                        updateStateFilter('isNoAkunChecked', value);
+                                                    }}
+                                                    style={{ borderRadius: 3, borderColor: 'gray' }}
+                                                />
+                                            </div>
+                                            <div className="mt-1 flex justify-between">
+                                                <div className="container form-input">
+                                                    <TextBoxComponent
+                                                        id="noAkun"
+                                                        name="noAkun"
+                                                        placeholder=""
+                                                        value={filterData.noAkunValue}
+                                                        input={(args: FocusInEventArgs) => {
+                                                            const value: any = args.value;
+                                                            updateStateFilter('noAkunValue', value);
+                                                            if (value.length > 0) {
+                                                                updateStateFilter('isNoAkunChecked', true);
+                                                            } else {
+                                                                updateStateFilter('isNoAkunChecked', false);
+                                                            }
+                                                        }}
+                                                    />
+                                                </div>
+                                            </div>
+                                            {/* Keterangan */}
+                                            <div className="mt-2 flex">
+                                                <CheckBoxComponent
+                                                    label="Keterangan"
+                                                    checked={filterData.isKeteranganChecked}
+                                                    change={(args: ChangeEventArgsButton) => {
+                                                        const value: any = args.checked;
+                                                        updateStateFilter('isKeteranganChecked', value);
+                                                    }}
+                                                    style={{ borderRadius: 3, borderColor: 'gray' }}
+                                                />
+                                            </div>
+                                            <div className="mt-1 flex justify-between">
+                                                <div className="container form-input">
+                                                    <TextBoxComponent
+                                                        id="keterangan"
+                                                        name="keterangan"
+                                                        placeholder=""
+                                                        value={filterData.keteranganValue}
+                                                        input={(args: FocusInEventArgs) => {
+                                                            const value: any = args.value;
+                                                            updateStateFilter('keteranganValue', value);
+                                                            if (value.length > 0) {
+                                                                updateStateFilter('isKeteranganChecked', true);
+                                                            } else {
+                                                                updateStateFilter('isKeteranganChecked', false);
+                                                            }
+                                                        }}
+                                                    />
+                                                </div>
+                                            </div>
+                                            {/* Tipe */}
+                                            <div className="mt-2 flex">
+                                                <CheckBoxComponent
+                                                    label="Tipe"
+                                                    checked={filterData.isTipeChecked}
+                                                    change={(args: ChangeEventArgsButton) => {
+                                                        const value: any = args.checked;
+                                                        updateStateFilter('isTipeChecked', value);
+                                                    }}
+                                                    style={{ borderRadius: 3, borderColor: 'gray' }}
+                                                />
+                                            </div>
+                                            <div className="mt-1 flex justify-between">
+                                                <div className="container form-input">
+                                                    <DropDownListComponent
+                                                        id="tahun"
+                                                        dataSource={tipeValue}
+                                                        change={(args: ChangeEventArgsDropDown) => {
+                                                            const value: any = args.value;
+                                                            updateStateFilter('tipeValue', value);
+                                                            if (value.length > 0) {
+                                                                updateStateFilter('isTipeChecked', true);
+                                                            } else {
+                                                                updateStateFilter('isTipeChecked', false);
+                                                            }
+                                                        }}
+                                                        value={filterData.tipeValue}
+                                                    />
+                                                </div>
+                                            </div>
+                                            {/* Non Aktif */}
+                                            <div className="mt-1 ">
+                                                <div className="e-checkbox-wrapper e-wrapper">
+                                                    <label>
+                                                        <span className="e-label">Non Aktif</span>
+                                                    </label>
+                                                </div>
+                                                <div className="mt-1 flex items-center gap-4">
+                                                    <div className="flex">
+                                                        <input
+                                                            type="radio"
+                                                            name="nonAktif"
+                                                            id="nonAkifY"
+                                                            className="form-radio"
+                                                            checked={filterData.nonAktifValue === 'N'}
+                                                            onChange={(event) => updateStateFilter('nonAktifValue', 'N')}
+                                                            value={'Y'}
+                                                            style={{
+                                                                borderColor: '#ffffff',
+                                                            }}
+                                                        />
+                                                        <label className="ml-1" style={{ marginBottom: -2 }}>
+                                                            YA
+                                                        </label>
+                                                    </div>
+                                                    <div className="flex">
+                                                        <input
+                                                            type="radio"
+                                                            name="nonAktif"
+                                                            id="nonAktifN"
+                                                            className="form-radio"
+                                                            checked={filterData.nonAktifValue === 'Y'}
+                                                            onChange={(event) => updateStateFilter('nonAktifValue', 'Y')}
+                                                            value={'N'}
+                                                            style={{
+                                                                borderColor: '#ffffff',
+                                                            }}
+                                                        />
+                                                        <label className="ml-1" style={{ marginBottom: -2 }}>
+                                                            Tidak
+                                                        </label>
+                                                    </div>
+                                                    <div className="flex">
+                                                        <input
+                                                            type="radio"
+                                                            name="nonAktif"
+                                                            id="nonAkifAll"
+                                                            className="form-radio"
+                                                            checked={filterData.nonAktifValue === 'all' || filterData.nonAktifValue === ''}
+                                                            onChange={(event) => updateStateFilter('nonAktifValue', '')}
+                                                            value={'all'}
+                                                            style={{
+                                                                borderColor: '#ffffff',
+                                                            }}
+                                                        />
+                                                        <label className="ml-1" style={{ marginBottom: -2 }}>
+                                                            Semua
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {/* Level Akun */}
+                                            <div className="mt-1 ">
+                                                <div className="e-checkbox-wrapper e-wrapper">
+                                                    <label>
+                                                        <span className="e-label">Level Akun</span>
+                                                    </label>
+                                                </div>
+                                                <div className="mt-1 flex items-center gap-4">
+                                                    <div className="flex">
+                                                        <input
+                                                            type="radio"
+                                                            name="levelAkun"
+                                                            id="levelAkunInduk"
+                                                            className="form-radio"
+                                                            checked={filterData.levelAkunValue === 'G'}
+                                                            onChange={(event) => updateStateFilter('levelAkunValue', 'G')}
+                                                            value={'Y'}
+                                                            style={{
+                                                                borderColor: '#ffffff',
+                                                            }}
+                                                        />
+                                                        <label className="ml-1" style={{ marginBottom: -2 }}>
+                                                            Induk
+                                                        </label>
+                                                    </div>
+                                                    <div className="flex">
+                                                        <input
+                                                            type="radio"
+                                                            name="levelAkun"
+                                                            id="levelAkunSemua"
+                                                            className="form-radio"
+                                                            checked={filterData.levelAkunValue === '' || filterData.levelAkunValue === 'all'}
+                                                            onChange={(event) => updateStateFilter('levelAkunValue', '')}
+                                                            value={'Y'}
+                                                            style={{
+                                                                borderColor: '#ffffff',
+                                                            }}
+                                                        />
+                                                        <label className="ml-1" style={{ marginBottom: -2 }}>
+                                                            Semua
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </PerfectScrollbar>
+                                <div className="flex justify-center">
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            refreshData();
+                                            console.log('Filter Data : ', filterData);
+                                        }}
+                                        className="btn btn-primary mt-2"
+                                    >
+                                        <FontAwesomeIcon icon={faArrowsRotate} className="shrink-0 ltr:mr-2 rtl:ml-2" width="18" height="18" />
+                                        Refresh Data
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                    <div className={`overlay absolute z-[5] hidden h-full w-full rounded-md bg-black/60 `} onClick={() => setIsShowTaskMenu(isShowTaskMenu)}></div>
+                    <div className="h-full flex-1 overflow-auto">
+                        <GridComponent
+                            id="gridAkun"
+                            ref={gridAkun}
+                            // searchSettings={{
+                            //     fields: ['no_akun', 'namaakun'],
+                            // }}
+                            pageSettings={{
+                                pageSize: 25,
+                                pageCount: 5,
+                                pageSizes: ['25', '50', '100', 'All'],
+                            }}
+                            name="gridAkun"
+                            allowPaging={true}
+                            allowSorting={true}
+                            allowFiltering={false}
+                            allowResizing={true}
+                            dataSource={dsMaster}
+                            allowSelection={true}
+                            selectionSettings={{ mode: 'Row', type: 'Single' }}
+                            gridLines={'Both'}
+                            loadingIndicator={{ indicatorType: 'Shimmer' }}
+                            height={'100%'}
+                            autoFit={true}
+                            rowHeight={22}
+                            allowReordering={true}
+                            rowSelected={(args: any) => {
+                                setSelectedAkun(args.data.no_akun);
+                                setSelectedKodeAkun(args.data.kode_akun);
+                            }}
+                            recordDoubleClick={(args: any) => {
+                                openForm('edit');
+                            }}
+                        >
+                            <ColumnsDirective>
+                                <ColumnDirective template={(props: any) => TextTemplate(props, 'no_akun')} field="no_akun" headerText="No. Akun" headerTextAlign="Center" width={300} />
+                                <ColumnDirective template={(props: any) => TextTemplate(props, 'nama_akun')} field="nama_akun" headerText="Keterangan" headerTextAlign="Center" width={300} />
+                                <ColumnDirective template={(props: any) => TextTemplate(props, 'tipe')} field="tipe" headerText="Tipe" headerTextAlign="Center" width={300} />
+                            </ColumnsDirective>
+                            <Inject services={[Page, Selection, Sort, Group, Filter, Resize, Reorder, ExcelExport, PdfExport]} />
+                        </GridComponent>
+                    </div>
+                </div>
+            </div>
+            {showModalCreate && (
+                <FrmDialogAkun
+                    isOpen={showModalCreate}
+                    onClose={async () => {
+                        await refreshData();
+                        setShowModalCreate(false);
+                        setSelectedAkun('');
+                        setTypeForm('');
+                    }}
+                    entitas={kode_entitas}
+                    token={token}
+                    userid={userid}
+                    AkunSelected={selectedAkun ?? ''}
+                    state={typeForm}
+                />
+            )}
+        </>
+    );
+};
+
+export default Index;

@@ -1,0 +1,18 @@
+.checkmark {
+    color: green;
+    font-size: 16px; /* Adjust size as needed */
+}
+
+.crossmark {
+    color: red;
+    font-size: 16px; /* Adjust size as needed */
+}
+
+.e-input-group.e-control-wrapper {
+    width: 100%;
+}
+.e-input-group.e-control-wrapper .e-input {
+    border: 1px solid #d1d5db;
+    padding: 0.5rem;
+    width: 100%;
+}

@@ -1,0 +1,23 @@
+/* .category-item {
+    margin: 5px 0;
+    text-decoration: underline;
+    position: relative;
+    padding-left: 25px;
+    cursor: pointer;
+} */
+
+.category-item {
+    cursor: pointer;
+    padding: 10px;
+    margin: 5px 0;
+    text-decoration: underline;
+    position: relative;
+    padding-left: 25px;
+    color: #1344d7;
+    font-weight: bold;
+}
+
+.category-item.active {
+    font-weight: bold;
+    /* color: #7f1c1c; */
+}

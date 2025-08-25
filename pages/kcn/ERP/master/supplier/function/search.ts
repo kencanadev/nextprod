@@ -1,0 +1,42 @@
+export const HandleSearchNoSupplier = (event: any, setStateDataHeader: Function, setStateDataArray: Function, dataDaftarAkunKredit: any) => {
+    const searchValue = event;
+    setStateDataHeader(searchValue);
+
+    const filteredData = searchDataNoAkun(searchValue, dataDaftarAkunKredit);
+
+    setStateDataArray(filteredData);
+};
+
+const searchDataNoAkun = (keyword: any, dataDaftarAkunKredit: any) => {
+    // Jika keyword kosong, kembalikan semua data
+    if (keyword === '') {
+        return dataDaftarAkunKredit;
+    } else {
+        // Lakukan pencarian di sini, misalnya dengan filter data berdasarkan kata kunci
+        const filteredData = dataDaftarAkunKredit.filter((item: any) => item.no_supp.toLowerCase().includes(keyword.toLowerCase()));
+        return filteredData;
+    }
+};
+
+export const HandleSearchNamaAkun = (event: any, setStateDataHeader: Function, setStateDataArray: Function, dataDaftarAkunKredit: any) => {
+    const searchValue = event;
+    setStateDataHeader((prevState: any) => ({
+        ...prevState,
+        nama_akun: searchValue,
+    }));
+
+    const filteredData = searchDataNamaAkun(searchValue, dataDaftarAkunKredit);
+
+    setStateDataArray(filteredData);
+};
+
+const searchDataNamaAkun = (keyword: any, dataDaftarAkunKredit: any) => {
+    // Jika keyword kosong, kembalikan semua data
+    if (keyword === '') {
+        return dataDaftarAkunKredit;
+    } else {
+        // Lakukan pencarian di sini, misalnya dengan filter data berdasarkan kata kunci
+        const filteredData = dataDaftarAkunKredit.filter((item: any) => item.nama_akun.toLowerCase().includes(keyword.toLowerCase()));
+        return filteredData;
+    }
+};

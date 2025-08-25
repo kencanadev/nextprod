@@ -1,0 +1,30 @@
+export interface RelasiInterface {
+    kode_relasi: string;
+    kode_supp: string;
+    tipe: string;
+    nama_relasi: string;
+    alamat: string;
+    alamat2: string;
+    kota: string;
+    propinsi: string;
+    kodepos: string;
+    negara: string;
+    telp: string;
+    telp2: string;
+    hp: string;
+    hp2: string;
+    fax: string;
+    email: string ;
+    website: string ;
+    npwp: string;
+    siup: string ;
+    personal: string;
+    ktp: string;
+    sim: string ;
+    tgl_relasi: string;
+    catatan: string ;
+    userid: string;
+    tgl_update: string;
+    kecamatan: string ;
+    kelurahan: string ;
+  }

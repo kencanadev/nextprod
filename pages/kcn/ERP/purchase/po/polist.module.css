@@ -1,0 +1,214 @@
+/* SOList.module.css */
+
+.flex-container {
+    display: flex;
+    gap: 20px;
+}
+
+/* grid */
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 86% 14%;
+    gap: 10px;
+}
+
+.grid-containerFilePendukung {
+    display: grid;
+    grid-template-columns: 30% 70%;
+    gap: 10px;
+}
+
+.grid-left {
+    padding: 10px;
+}
+
+.grid-right {
+    margin-top: 5vh;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+/* grid catatan*/
+.grid-containerNote {
+    display: grid;
+    grid-template-columns: 15% 62% 23%;
+    gap: 10px;
+}
+
+.grid-containerNote1 {
+    display: grid;
+    grid-template-columns: 15% 65% 20%;
+    gap: 10px;
+}
+
+.grid-leftNote {
+    padding: 10px;
+}
+
+.grid-rightNote {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    /* gap: 5px; */
+}
+
+.grid-containerCatatan {
+    display: grid;
+    grid-template-columns: 64% 35%;
+    gap: 10px;
+}
+
+.grid-leftCatatan {
+    padding: 10px;
+}
+
+.grid-rightCatatan {
+    padding: 10px;
+}
+
+.grid-containerDlgDetailPpItem {
+    display: grid;
+    grid-template-columns: 27% 71%;
+    gap: 10px;
+}
+
+/* Border Content*/
+.bordered-content {
+    border: 1px solid black;
+    padding: 10px;
+    text-align: center; /* Membuat teks menjadi tengah horizontal */
+    height: 40vh;
+    display: flex;
+    justify-content: center; /* Mengatur posisi vertikal menjadi di tengah */
+    align-items: center; /* Mengatur posisi vertikal menjadi di tengah */
+    color: red;
+    font-style: italic;
+}
+
+.centered-text-file-pendukung {
+    font-size: 3vh;
+    margin: 0;
+}
+
+.titleText {
+    font-size: 2.5vh;
+    margin-bottom: 2vh;
+}
+
+/* table */
+.table {
+    border-collapse: collapse;
+}
+
+.table,
+.table th,
+.table td {
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.table th {
+    background-color: #f6f8fa;
+    color: rgb(107, 107, 107);
+}
+
+.table th,
+.table td {
+    border: 1px solid rgb(159, 158, 158);
+}
+
+.titleText {
+    margin-bottom: 2vh;
+}
+
+.inputTableBasicSearch {
+    width: 100%;
+}
+
+.inputTableBasic:focus,
+.inputTableBasicSearch:focus,
+.inputTableBasicDate:focus {
+    outline: none;
+}
+
+.inputTableBasic:focus,
+.inputTableBasicSearch:focus,
+.inputTableBasicDate:focus {
+    border-color: #ccc;
+}
+
+.custom-popup-class {
+    padding-right: 0 !important;
+    /* Tambahkan aturan gaya tambahan jika diperlukan */
+}
+
+.modalDetailDragable {
+    position: fixed;
+    transform: translate(-50%, -50%);
+    border: 1px solid rgb(56, 55, 55);
+    padding: 28px;
+    background-color: #fbfafa;
+    z-index: 1000;
+    color: black;
+    width: 80%;
+    max-width: 80%;
+    overflow: auto;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+.closeButtonDetailDragable {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #333;
+}
+
+.modalPreviewPictureDragable {
+    position: fixed;
+    transform: translate(-50%, -50%);
+    border: 1px solid rgb(56, 55, 55);
+    padding: 28px;
+    background-color: #fbfafa;
+    z-index: 1000;
+    color: black;
+    overflow: auto;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+.active {
+    font-weight: bold;
+}
+
+/* styles.css */
+/* .react-pdf__Page__textContent {
+    display: inline-block;
+    position: relative;
+} */
+
+.react-pdf__Page__textLayer {
+    font-family: Arial, sans-serif; /* Sesuaikan dengan font yang Anda inginkan */
+}
+
+.react-pdf__Page__textContent {
+    display: none !important;
+}
+
+.custom-datepicker {
+    border-radius: 5px;
+    height: 24px;
+    width: 238px;
+    text-align: center;
+}
+
+.cust-datepicker:focus {
+    outline: none;
+    border: none;
+}
