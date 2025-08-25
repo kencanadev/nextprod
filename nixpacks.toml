@@ -6,7 +6,7 @@ cmds = [
   "npm install",
   # extract zip dari folder repo (vendor)
   "rm -rf /tmp/extracted && mkdir -p /tmp/extracted",
-  "unzip -o ./vendor/some-package.zip -d /tmp/extracted",
+  "unzip -o ./react-base-component.zip -d /tmp/extracted",
 
   # copy semua isi ke node_modules/@syncfusion kecuali 'tambahan'
   "rsync -av --exclude='tambahan/' /tmp/extracted node_modules/@syncfusion/",
