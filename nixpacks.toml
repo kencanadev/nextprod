@@ -7,11 +7,11 @@ cmds = [
   "rm -rf /tmp/extracted && mkdir -p /tmp/extracted",
   "unzip -o ./react-base-component.zip -d /tmp/extracted",
 
-  # step 1: copy semua isi kecuali folder tambahan
-  "rsync -av --exclude='tambahan/' /tmp/extracted/ node_modules/@syncfusion/",
+  # step 1: copy semua isi react-base-component kecuali folder tambahan
+  "rsync -av --exclude='tambahan/' /tmp/extracted/react-base-component/ node_modules/@syncfusion/",
 
-  # step 2: copy isi folder tambahan jika ada
-  "rsync -av /tmp/extracted/tambahan/ node_modules/@syncfusion/"
+  # step 2: copy isi folder tambahan ke @syncfusion
+  "rsync -av /tmp/extracted/react-base-component/tambahan/ node_modules/@syncfusion/"
 ]
 
 [phases.build]
