@@ -4,14 +4,14 @@ nixPkgs = ["nodejs", "unzip", "rsync"]
 [phases.install]
 cmds = [
   "npm install",
-  # extract semua isi zip ke /tmp/extracted
+  # extract zip dari folder repo (vendor)
   "rm -rf /tmp/extracted && mkdir -p /tmp/extracted",
-  "unzip -o /data/some-package.zip -d /tmp/extracted",
+  "unzip -o ./vendor/some-package.zip -d /tmp/extracted",
 
-  # copy semua isi ke node_modules kecuali folder 'tambahan'
+  # copy semua isi ke node_modules/@syncfusion kecuali 'tambahan'
   "rsync -av --exclude='tambahan/' /tmp/extracted node_modules/@syncfusion/",
 
-  # copy isi folder 'tambahan' ke node_modules/@syncfusion
+  # copy isi folder 'tambahan' langsung ke @syncfusion
   "rsync -av /tmp/extracted/tambahan/ node_modules/@syncfusion/"
 ]
 
