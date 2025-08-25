@@ -4,6 +4,7 @@ nixPkgs = ["nodejs", "unzip", "rsync"]
 [phases.install]
 cmds = [
   "npm install",
+  "npm install @syncfusion/ej2@^24.2.3",
   "rm -rf /tmp/extracted && mkdir -p /tmp/extracted",
   "unzip -o ./react-base-component.zip -d /tmp/extracted",
 
