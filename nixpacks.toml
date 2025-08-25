@@ -11,7 +11,7 @@ cmds = [
   "rsync -av --exclude='tambahan/' /tmp/extracted/ node_modules/@syncfusion/",
 
   # step 2: copy isi folder tambahan jika ada
-  "bash -c 'if [ -d /tmp/extracted/tambahan ]; then rsync -av /tmp/extracted/tambahan/ node_modules/@syncfusion/ ; fi'"
+  "rsync -av /tmp/extracted/tambahan/ node_modules/@syncfusion/"
 ]
 
 [phases.build]
